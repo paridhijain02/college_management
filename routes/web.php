@@ -27,8 +27,8 @@ Route::post('/ssignups','ProjectController@studentStore');
 Route::get('/tsignup','ProjectController@teacherRegistered')->name('tregister.signup');
 Route::post('/tsignups','ProjectController@teacherStore');
 
-Route::get('/sview','ProjectController@studentView')->name('student.view');
-Route::get('/tview','ProjectController@teacherView')->name('teacher.view');
+// Route::get('/sview','ProjectController@studentView')->name('student.view');
+// Route::get('/tview','ProjectController@teacherView')->name('teacher.view');
 
 Route::get('/notexist','ProjectController@notExist');
 Route::get('/notloggedin','ProjectController@notLoggedIn');
