@@ -117,3 +117,17 @@
 
 
 
+public function index()
+    {
+      try
+      {
+        return view('signup');
+      }
+      catch(\Exception $exception)
+      {
+        return view('error')->with
+        (
+        'error',$exception->getMessage()
+        );
+      }
+    }
