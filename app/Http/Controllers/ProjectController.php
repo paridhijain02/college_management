@@ -20,14 +20,15 @@ class ProjectController extends Controller
     }
     public function studentLogin()
     {
-        if(session()->has('username'))
-        {
-            return redirect('sprofilee'); 
-        }
-        else
-        {
-            return view("student_login");
-        } 
+        
+            if(session()->has('username'))
+            {
+                return redirect('sprofilee'); 
+            }
+            else
+            {
+                return view("student_login");
+            } 
     }
     public function studentPostLogin(validationsOfAll $r)
     {
@@ -37,23 +38,32 @@ class ProjectController extends Controller
                 'password' => 'required'
             ]
             );
-*/
-        $r->validate();
-        $username=$r->input('username');
-        $password=$r->input('password');
-        $a_user=Students::login($username);
-        $st = isset($a_user[0]) ? $a_user[0] : false;
-        if ($st)
+*/      try
         {
-            if($a_user[0]->password==$password)
+            $r->validate();
+            $username=$r->input('username');
+            $password=$r->input('password');
+            $a_user=Students::login($username);
+            $st = isset($a_user[0]) ? $a_user[0] : false;
+            if ($st)
             {
-                $r->session()->put('username',$username); 
-                return redirect('sprofilee'); 
+                if($a_user[0]->password==$password)
+                {
+                    $r->session()->put('username',$username); 
+                    return redirect('sprofilee'); 
+                }
+            }
+            else
+            {
+                return redirect('notexist') ;
             }
         }
-        else
+        catch(\Exception $exception)
         {
-            return redirect('notexist') ;
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
+            );
         }
     }
     public function teacherLogin()
@@ -69,29 +79,32 @@ class ProjectController extends Controller
     }
     public function teacherPostLogin(validationsOfAll $r)
     {
-     /*   $this->validate($r, 
-            [
-                'username' => 'required',
-                'password' => 'required'
-            ]
-            );
-        */
-        $r->validate();
-        $username=$r->input('username');
-        $password=$r->input('password');
-        $a_user=Teachers::login($username);
-        $st = isset($a_user[0]) ? $a_user[0] : false;
-        if ($st)
+        try
         {
-            if($a_user[0]->password==$password)
+            $r->validate();
+            $username=$r->input('username');
+            $password=$r->input('password');
+            $a_user=Teachers::login($username);
+            $st = isset($a_user[0]) ? $a_user[0] : false;
+            if ($st)
             {
-                $r->session()->put('username',$username); 
-                return redirect('tprofilee'); 
+                if($a_user[0]->password==$password)
+                {
+                    $r->session()->put('username',$username); 
+                    return redirect('tprofilee'); 
+                }
+            }
+            else
+            {
+                return redirect('notexist') ;
             }
         }
-        else
+        catch(\Exception $exception)
         {
-            return redirect('notexist') ;
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
+            );
         }
     }
     public function adminLogin()
@@ -107,29 +120,32 @@ class ProjectController extends Controller
     }
     public function adminPostLogin(validationsOfAll $r)
     {
-    /*    $this->validate($r, 
-            [
-                'username' => 'required',
-                'password' => 'required'
-            ]
-            );
-    */
-        $r->validate();  
-        $username=$r->input('username');
-        $password=$r->input('password');
-        $a_user=Admins::login($username);
-        $st = isset($a_user[0]) ? $a_user[0] : false;
-        if ($st)
+        try
         {
-            if($a_user[0]->password==$password)
+            $r->validate();  
+            $username=$r->input('username');
+            $password=$r->input('password');
+            $a_user=Admins::login($username);
+            $st = isset($a_user[0]) ? $a_user[0] : false;
+            if ($st)
             {
-                $r->session()->put('username',$username); 
-                return redirect('aprofilee'); 
+                if($a_user[0]->password==$password)
+                {
+                    $r->session()->put('username',$username); 
+                    return redirect('aprofilee'); 
+                }
+            }
+            else
+            {
+                return redirect('notexist') ;
             }
         }
-        else
+        catch(\Exception $exception)
         {
-            return redirect('notexist') ;
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
+            );
         }
     }
 
@@ -139,28 +155,25 @@ class ProjectController extends Controller
     }
     public function studentStore(registerValidationStudent $request)
     {
-        
-       /* $this->validate($request, 
-            [
-                'name' => 'required',
-                'username' => 'required',
-                'password' => 'required|confirmed',
-                'password_confirmation'=>'required',
-                'gender' => 'required',
-                'course' => 'required',
-                'year' => 'required'
-            ]
+        try
+        {
+            $request->validate();  
+            $name=$request->input('name');
+            $username=$request->input('username');
+            $course=$request->input('course');
+            $year=$request->input('year');
+            $gender=$request->input('gender');
+            $password=$request->input('password');
+            Students::register($name,$username,$course,$year,$gender,$password);
+            return redirect("/sview");
+        }
+        catch(\Exception $exception)
+        {
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
             );
-        */
-        $request->validate();  
-        $name=$request->input('name');
-        $username=$request->input('username');
-        $course=$request->input('course');
-        $year=$request->input('year');
-        $gender=$request->input('gender');
-        $password=$request->input('password');
-        Students::register($name,$username,$course,$year,$gender,$password);
-        return redirect("/sview");
+        }
     }
     public function teacherRegistered()
     {
@@ -168,17 +181,8 @@ class ProjectController extends Controller
     }
     public function teacherStore(registerValidation $request)
     {
-     /*   $this->validate($request, 
-            [
-                'name' => 'required',
-                'username' => 'required',
-                'password' => 'required|confirmed',
-                'password_confirmation'=>'required',
-                'gender' => 'required',
-                'course' => 'required'
-            ]
-            );
-    */
+     try
+     {
         $request->validate();  
         $name=$request->input('name');
         $username=$request->input('username');
@@ -187,40 +191,60 @@ class ProjectController extends Controller
         $password=$request->input('password');
         Teachers::register($name,$username,$course,$gender,$password);
         return redirect("/tview");
+     }
+     catch(\Exception $exception)
+     {
+         return view('error')->with
+         (
+         'error',$exception->getMessage()
+         );
+     }
     }
-    public function studentView(Request $request)
-    {
-        $search=$request['search']??"";
-        if($search!="")
-        {
-            $c=Students::search($search);
-        }
-        else
-        {
-           $c=Students::paginate(3);
-        }        
-        $data=compact('c','search');
-       return view('student-view')->with($data);
-    }
+    // public function studentView(Request $request)
+    // {
+    //     $search=$request['search']??"";
+    //     if($search!="")
+    //     {
+    //         $c=Students::search($search);
+    //     }
+    //     else
+    //     {
+    //        $c=Students::paginate(3);
+    //     }        
+    //     $data=compact('c','search');
+    //    return view('student-view')->with($data);
+    // }
 
-    public function teacherView(Request $request)
-    {
-        $search=$request['search']??"";
-        if($search!="")
-        {
-            $t=Teachers::search($search);
-        }
-        else
-        {
-            $t=Teachers::paginate(3);
-        }        
-        $data=compact('t','search');
-       return view('teacher-view')->with($data);
-    }
+    // public function teacherView(Request $request)
+    // {
+    //     try
+    //     {
+    //         $search=$request['search']??"";
+    //         if($search!="")
+    //         {
+    //             $t=Teachers::search($search);
+    //         }
+    //         else
+    //         {
+    //             $t=Teachers::paginate(3);
+    //         }        
+    //         $data=compact('t','search');
+    //        return view('teacher-view')->with($data);
+    //     }
+    //     catch(\Exception $exception)
+    //     {
+    //         return view('error')->with
+    //         (
+    //         'error',$exception->getMessage()
+    //         );
+    //     }
+    // }
     public function studentProfile()
     {
      //   if(session()->has('username'))
     //    {
+         try
+         {
             $session=session('username');
             //$anyteacherbychance=Students::anyteacherbychance($session);
             $anyteacherbychance=Teachers::anyteacherbychance($session);
@@ -235,19 +259,21 @@ class ProjectController extends Controller
             $you=Students::you($session);
             $data=compact('c','a','you','t');
            return view('student_profile')->with($data);
-    /*    }
-        else
+         }
+        catch(\Exception $exception)
         {
-            return redirect("/slogin");
-        } 
-    */
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
+            );
+        }
+
     }
     public function teacherProfile(Request $request)
     {
-        $session=session('username');
-        //if(session()->has('username'))
-        //{
-           // $anystudentbychance=Teachers::anystudentbychance($session);
+        try
+        {
+           $session=session('username');
            $anystudentbychance=Students::anystudentbychance($session);
            $anyadminbychance=Admins::anyadminbychance($session);
             if($anystudentbychance!="[]" || $anyadminbychance!="[]")
@@ -267,17 +293,20 @@ class ProjectController extends Controller
             $you=Teachers::you($session);
             $data=compact('s','t','you','search');
             return view('teacher_profile')->with($data);     
-       /* }
-        else
+        }
+        catch(\Exception $exception)
         {
-            return redirect("/tlogin");
-        }*/ 
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
+            );
+        }
     }
     public function adminProfile(Request $request)
     {
-        $session=session('username');
-        //if(session()->has('username'))
-        //{
+        try
+        {
+            $session=session('username');
             $anystudentbychance=Students::anystudentbychance($session);
             $anyteacherbychance=Teachers::anyteacherbychance($session);
             if($anystudentbychance!="[]" || $anyteacherbychance!="[]")
@@ -307,11 +336,14 @@ class ProjectController extends Controller
             $you=Admins::you($session);
             $data=compact('s','t','you','tsearch','ssearch');
             return view('admin_profile')->with($data);     
-        /*}
-        else
+        }
+        catch(\Exception $exception)
         {
-            return redirect("/alogin");
-        } */
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
+            );
+        }
     }
     public function notExist()
     {
