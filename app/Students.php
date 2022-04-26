@@ -28,6 +28,10 @@ class Students extends Model
     {
         return Students::where('username',$username)->get();
     }
+    public static function index()
+    {
+        return Students::get();
+    }
     /*
     public static function anyteacherbychance($session)
     {

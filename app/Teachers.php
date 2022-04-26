@@ -23,6 +23,11 @@ class Teachers extends Model
     {
         return Teachers::where('name','=',$search)->orwhere('username','=',$search)->orwhere('course','=',$search)->paginate(3);
     }
+    public static function index()
+    {
+        return Teachers::get();
+    }
+
     public static function login($username)
     {
         return Teachers::where('username',$username)->get();
@@ -60,4 +65,5 @@ class Teachers extends Model
         $teacher->gender=$gender;
         $teacher->save();
     }
+    
 }

@@ -25,9 +25,9 @@ class registerValidationStudent extends FormRequest
     {
         return 
         [
-            'name' => 'required',
-            'username' => 'required',
-            'password' => 'required',
+            'name' => 'required|min:3|max:100',
+            'username' => 'required|min:3|max:100',
+            'password' => 'required|min:1|max:100',
             'gender' => 'required',
             'course' => 'required',
             'year' => 'required'

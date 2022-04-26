@@ -18,7 +18,7 @@
               <input type="search" name="search" id="" class="form-control" placeholder="" value="{{$search}}">
             </div>
             <button class="btn btn-primary">Search</button>
-            <a href="{{url('/sview')}}">
+            <a href="{{url('/api/sview')}}">
                 <button class='btn btn-primary' type="button">Reset</button>
             </a>
         </form>

@@ -24,7 +24,7 @@ class assignmentVal extends FormRequest
     public function rules()
     {
         return [
-            'assignment' => 'required',
+            'assignment' => 'required|min:3|max:200',
         ];
     }
 }

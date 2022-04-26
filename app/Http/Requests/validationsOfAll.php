@@ -24,8 +24,8 @@ class validationsOfAll extends FormRequest
     public function rules()
     {
         return [
-                'username' => 'required',
-                'password' => 'required', 
+                'username' => 'required|min:3|max:100',
+                'password' => 'required|min:1|max:100', 
                 /*
                 'name' => 'required',
                 'username' => 'required',
