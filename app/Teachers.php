@@ -65,4 +65,5 @@ class Teachers extends Model
         $teacher->gender=$gender;
         $teacher->save();
     }
+    
 }
