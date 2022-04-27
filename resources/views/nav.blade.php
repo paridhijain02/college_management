@@ -99,6 +99,11 @@
                         <span class="item">Teacher View</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('all.view')}}">
+                        <span class="item">All View</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>	
