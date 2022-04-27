@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/sview','ApiController@studentView')->name('student.view');
 Route::get('/tview','ApiController@teacherView')->name('teacher.view');
+Route::get('/aview','ApiController@allView')->name('all.view');
