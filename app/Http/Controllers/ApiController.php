@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use App\Students;
 use App\Teachers;
+use App\Studentassignments;
 class ApiController extends Controller
 {
     public function studentView(Request $request)
@@ -81,4 +82,43 @@ class ApiController extends Controller
             );
         }
     }
+
+    public function allView(Request $request)
+    {
+        try
+        {
+            $search=$request['search']??"";
+            if($search!="")
+            {
+                $t=Studentassignments::search($search);
+            }
+            else
+            {
+                //    $t=Teachers::paginate(3);
+                $t = Studentassignments::allpeople();
+                $filter_data = [];
+                foreach($t as $row)
+                {
+                    array_push($filter_data, $row);
+                }
+                $count = count($filter_data);
+                $page = $request->page;
+                $perPage = 5;
+                $offset = ($page-1) * $perPage;
+                $t = array_slice($filter_data, $offset, $perPage);
+                $t = new Paginator($t, $count, $perPage, $page, ['path' => $request->url(),'query' => $request->query(),]); 
+            }
+                   
+            $data=compact('t','s','search');
+           return view('all-view')->with($data);
+        }
+        catch(\Exception $exception)
+        {
+            return view('error')->with
+            (
+            'error',$exception->getMessage()
+            );
+        }
+    }
+
 }
