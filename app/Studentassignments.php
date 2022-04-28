@@ -26,12 +26,7 @@ class Studentassignments extends Model
     }
 
     public static function allpeople()
-    {
-        // return Students::join('Assignments', 'Students.course', '=', 'Assignments.course')
-        // ->join('Teachers', 'Teachers.course', '=', 'Assignments.course')
-        // ->select('Students.username', 'Teachers.name', 'Assignments.assignment','Students.course')
-        // ->get();
-        
+    {   
         return Studentassignments::get();
     }
 }

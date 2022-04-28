@@ -32,13 +32,7 @@ class Teachers extends Model
     {
         return Teachers::where('username',$username)->get();
     }
-/*
-    public static function anystudentbychance($session)
-    {
-        return Students::where('username',$session)->get(); 
-    }
-*/
-    public static function anyteacherbychance($session)
+    public static function anyTeacherByChance($session)
     {
         return Teachers::where('username',$session)->get(); 
     }

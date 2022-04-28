@@ -20,133 +20,99 @@ class ProjectController extends Controller
     }
     public function studentLogin()
     {
-        
-            if(session()->has('username'))
-            {
-                return redirect('sprofilee'); 
-            }
-            else
-            {
-                return view("student_login");
-            } 
-    }
-    public function studentPostLogin(validationsOfAll $r)
-    {
-/*        $this->validate($r, 
-            [
-                'username' => 'required',
-                'password' => 'required'
-            ]
-            );
-*/      try
-        {
-            $r->validate();
-            $username=$r->input('username');
-            $password=$r->input('password');
-            $a_user=Students::login($username);
-            $st = isset($a_user[0]) ? $a_user[0] : false;
-            if ($st)
-            {
-                if($a_user[0]->password==$password)
-                {
-                    $r->session()->put('username',$username); 
-                    return redirect('sprofilee'); 
-                }
-            }
-            else
-            {
-                return redirect('notexist') ;
-            }
-        }
-        catch(\Exception $exception)
-        {
-            return view('error')->with
-            (
-            'error',$exception->getMessage()
-            );
-        }
-    }
-    public function teacherLogin()
-    {
         if(session()->has('username'))
         {
-            return redirect('tprofilee'); 
+            return redirect('sprofilee'); 
         }
         else
         {
+            return view("student_login");
+        } 
+    }
+    public function studentPostLogin(validationsOfAll $r)
+    {
+        $r->validate();
+        $username=$r->input('username');
+        $password=$r->input('password');
+        try{
+            $student_user=Students::login($username);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        $student = isset($student_user[0]) ? $student_user[0] : false;
+        if ($student){
+            if($student_user[0]->password==$password){
+                $r->session()->put('username',$username); 
+                return redirect('sprofilee'); 
+            }
+        }
+        return redirect('notexist') ;
+    }
+    public function teacherLogin()
+    {
+        if(session()->has('username')){
+            return redirect('tprofilee'); 
+        }
+        else{
             return view("teacher_login");
         } 
     }
     public function teacherPostLogin(validationsOfAll $r)
     {
-        try
-        {
             $r->validate();
             $username=$r->input('username');
             $password=$r->input('password');
-            $a_user=Teachers::login($username);
-            $st = isset($a_user[0]) ? $a_user[0] : false;
-            if ($st)
-            {
-                if($a_user[0]->password==$password)
+            try{
+                $teacher_user=Teachers::login($username);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            $teacher = isset($teacher_user[0]) ? $teacher_user[0] : false;
+            if ($teacher){
+                if($teacher_user[0]->password==$password)
                 {
                     $r->session()->put('username',$username); 
                     return redirect('tprofilee'); 
                 }
             }
-            else
-            {
-                return redirect('notexist') ;
-            }
-        }
-        catch(\Exception $exception)
-        {
-            return view('error')->with
-            (
-            'error',$exception->getMessage()
-            );
-        }
+            return redirect('notexist') ;
     }
     public function adminLogin()
     {
-        if(session()->has('username'))
-        {
+        if(session()->has('username')){
             return redirect('aprofilee'); 
         }
-        else
-        {
+        else{
             return view("admin_login");
         } 
     }
     public function adminPostLogin(validationsOfAll $r)
     {
-        try
-        {
-            $r->validate();  
-            $username=$r->input('username');
-            $password=$r->input('password');
-            $a_user=Admins::login($username);
-            $st = isset($a_user[0]) ? $a_user[0] : false;
-            if ($st)
-            {
-                if($a_user[0]->password==$password)
-                {
-                    $r->session()->put('username',$username); 
-                    return redirect('aprofilee'); 
-                }
-            }
-            else
-            {
-                return redirect('notexist') ;
-            }
+        $r->validate();  
+        $username=$r->input('username');
+        $password=$r->input('password');
+        try{
+            $admin_user=Admins::login($username);
         }
-        catch(\Exception $exception)
-        {
-            return view('error')->with
-            (
+        catch(\Exception $exception){
+            return view('error')->with(
             'error',$exception->getMessage()
             );
         }
+        $admin = isset($admin_user[0]) ? $admin_user[0] : false;
+        if ($admin){
+            if($admin_user[0]->password==$password){
+                $r->session()->put('username',$username); 
+                return redirect('aprofilee'); 
+            }
+        }
+        return redirect('notexist') ;  
     }
 
     public function studentRegistered()
@@ -155,17 +121,17 @@ class ProjectController extends Controller
     }
     public function studentStore(registerValidationStudent $request)
     {
+        $request->validate();  
+
+        $name=$request->input('name');
+        $username=$request->input('username');
+        $course=$request->input('course');
+        $year=$request->input('year');
+        $gender=$request->input('gender');
+        $password=$request->input('password');
         try
         {
-            $request->validate();  
-            $name=$request->input('name');
-            $username=$request->input('username');
-            $course=$request->input('course');
-            $year=$request->input('year');
-            $gender=$request->input('gender');
-            $password=$request->input('password');
             Students::register($name,$username,$course,$year,$gender,$password);
-            return redirect("/sview");
         }
         catch(\Exception $exception)
         {
@@ -174,6 +140,7 @@ class ProjectController extends Controller
             'error',$exception->getMessage()
             );
         }
+        return redirect("/sview");
     }
     public function teacherRegistered()
     {
@@ -181,169 +148,152 @@ class ProjectController extends Controller
     }
     public function teacherStore(registerValidation $request)
     {
-     try
-     {
         $request->validate();  
+
         $name=$request->input('name');
         $username=$request->input('username');
         $course=$request->input('course');
         $gender=$request->input('gender');
         $password=$request->input('password');
-        Teachers::register($name,$username,$course,$gender,$password);
-        return redirect("/tview");
-     }
-     catch(\Exception $exception)
-     {
-         return view('error')->with
-         (
-         'error',$exception->getMessage()
-         );
-     }
-    }
-    // public function studentView(Request $request)
-    // {
-    //     $search=$request['search']??"";
-    //     if($search!="")
-    //     {
-    //         $c=Students::search($search);
-    //     }
-    //     else
-    //     {
-    //        $c=Students::paginate(3);
-    //     }        
-    //     $data=compact('c','search');
-    //    return view('student-view')->with($data);
-    // }
-
-    // public function teacherView(Request $request)
-    // {
-    //     try
-    //     {
-    //         $search=$request['search']??"";
-    //         if($search!="")
-    //         {
-    //             $t=Teachers::search($search);
-    //         }
-    //         else
-    //         {
-    //             $t=Teachers::paginate(3);
-    //         }        
-    //         $data=compact('t','search');
-    //        return view('teacher-view')->with($data);
-    //     }
-    //     catch(\Exception $exception)
-    //     {
-    //         return view('error')->with
-    //         (
-    //         'error',$exception->getMessage()
-    //         );
-    //     }
-    // }
-    public function studentProfile()
-    {
-     //   if(session()->has('username'))
-    //    {
-         try
-         {
-            $session=session('username');
-            //$anyteacherbychance=Students::anyteacherbychance($session);
-            $anyteacherbychance=Teachers::anyteacherbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anyteacherbychance!='[]' || $anyadminbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $c=Students::all();
-            $a=Assignments::get();
-            $t=Teachers::get();
-            $you=Students::you($session);
-            $data=compact('c','a','you','t');
-           return view('student_profile')->with($data);
-         }
-        catch(\Exception $exception)
+        try
         {
+            Teachers::register($name,$username,$course,$gender,$password);
+        }
+        catch(\Exception $exception){
             return view('error')->with
             (
             'error',$exception->getMessage()
             );
         }
-
+        return redirect("/tview");
+    }
+    
+    public function studentProfile()
+    {
+        $session=session('username');
+        try{
+            $anyTeacherByChance=Teachers::anyTeacherByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyTeacherByChance!="[]" || $anyAdminByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        try{
+            $student=Students::all();
+            $assignment=Assignments::get();
+            $teacher=Teachers::get();
+            $you=Students::you($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        $data=compact('student','assignment','you','teacher');
+        return view('student_profile')->with($data);
     }
     public function teacherProfile(Request $request)
     {
-        try
-        {
-           $session=session('username');
-           $anystudentbychance=Students::anystudentbychance($session);
-           $anyadminbychance=Admins::anyadminbychance($session);
-            if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $s=Students::get();
-            $search=$request['search']??"";
-            if($search!="")
-            {
-               $t=Teachers::search($search);
-            }
-            else
-            {
-                $t=Teachers::get();
-            }        
-            $you=Teachers::you($session);
-            $data=compact('s','t','you','search');
-            return view('teacher_profile')->with($data);     
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
         }
-        catch(\Exception $exception)
-        {
-            return view('error')->with
-            (
+        catch(\Exception $exception){
+            return view('error')->with(
             'error',$exception->getMessage()
             );
         }
+        if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        try{
+            $student=Students::get();
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        $search=$request['search']??"";
+        if($search!=""){
+            try{
+                $teacher=Teachers::search($search);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+        }
+        else{
+            try{
+                $teacher=Teachers::get();
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+        }        
+        $you=Teachers::you($session);
+        $data=compact('student','teacher','you','search');
+        return view('teacher_profile')->with($data);     
     }
     public function adminProfile(Request $request)
     {
-        try
-        {
-            $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyteacherbychance=Teachers::anyteacherbychance($session);
-            if($anystudentbychance!="[]" || $anyteacherbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            //$s=Students::paginate(3);
-            $ssearch=$request['ssearch']??"";
-            if($ssearch!="")
-            {
-               $s=Students::search($ssearch);
-            }
-            else
-            {
-                $s=Students::paginate(3);
-            }        
-            //$s=Students::paginate(3);
-            $tsearch=$request['tsearch']??"";
-            if($tsearch!="")
-            {
-               $t=Teachers::search($tsearch);
-            }
-            else
-            {
-                $t=Teachers::paginate(3);
-            }        
-            $you=Admins::you($session);
-            $data=compact('s','t','you','tsearch','ssearch');
-            return view('admin_profile')->with($data);     
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyTeacherByChance=Teachers::anyTeacherByChance($session);
         }
         catch(\Exception $exception)
         {
-            return view('error')->with
-            (
+            return view('error')->with(
             'error',$exception->getMessage()
             );
         }
+        if($anyStudentByChance!="[]" || $anyTeacherByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        $ssearch=$request['ssearch']??"";
+        if($ssearch!=""){
+            try{
+                $student=Students::search($ssearch);
+            }
+            catch(\Exception $exception)
+            {
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+        }
+        else{
+            try{
+                $student=Students::paginate(3);
+            }
+            catch(\Exception $exception)
+            {
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+        }        
+        $tsearch=$request['tsearch']??"";
+        if($tsearch!=""){
+            $teacher=Teachers::search($tsearch);
+        }
+        else{
+            $teacher=Teachers::paginate(3);
+        }        
+        $you=Admins::you($session);
+        $data=compact('student','teacher','you','tsearch','ssearch');
+        return view('admin_profile')->with($data);     
     }
     public function notExist()
     {
@@ -356,47 +306,61 @@ class ProjectController extends Controller
     public function studentDelete($id)
     {
         $session=session('username');
-        $anystudentbychance=Students::anystudentbychance($session);
-        $anyadminbychance=Admins::anyadminbychance($session);
-        if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-        {
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
             return redirect("/notloggedin");
         }
-        $c=Students::find($id);
-        if(!is_null($c))
-        {
-            $c->delete();
+        try{
+            $student=Students::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($student)){
+            $student->delete();
         }
         return redirect('/tprofilee');
     }
     public function studentEdit($id)
     {
- /*       if(session()->has('username'))
-        {*/
-            $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $c=Students::find($id);
-            if(!is_null($c))
-            {
-                $title="Update Your student";
-                $url=url('/tprofilee/s_update') ."/". $id;
-                $data=compact('c','url','title');
-                return view('student-update')->with($data);
-            }
-            else
-            {
-                return redirect('/tprofilee');
-            }   
-        /*}
-         else
-         {
-            return redirect("/tlogin");
-         }*/
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        try{
+            $student=Students::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($student)){
+            $title="Update Your student";
+            $url=url('/tprofilee/s_update') ."/". $id;
+            $data=compact('student','url','title');
+            return view('student-update')->with($data);
+        }
+        return redirect('/tprofilee');
     }
     public function studentUpdate($id, Request $request)
     {
@@ -405,53 +369,74 @@ class ProjectController extends Controller
         $course=$request->input('course');
         $gender=$request->input('gender');
         $year=$request->input('year');
-        Teachers::studentupdate($id,$name,$username,$course,$gender,$year);
+        try{
+            Teachers::studentupdate($id,$name,$username,$course,$gender,$year);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
         return redirect("/tprofilee");
     }
     public function teacherDelete($id)
     {
         $session=session('username');
-        $anystudentbychance=Students::anystudentbychance($session);
-        $anyadminbychance=Admins::anyadminbychance($session);
-        if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-        {
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
             return redirect("/notloggedin");
         }
-        $c=Teachers::find($id);
-        if(!is_null($c))
-        {
-            $c->delete();
+        try{
+            $teacher=Teachers::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($teacher)){
+            $teacher->delete();
         }
         return redirect('/tprofilee');
     }
     public function teacherEdit($id)
     {
-        /*if(session()->has('username'))
-        {*/
             $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-            {
+            try{
+                $anyStudentByChance=Students::anyStudentByChance($session);
+                $anyAdminByChance=Admins::anyAdminByChance($session);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
                 return redirect("/notloggedin");
             }
-            $c=Teachers::find($id);
-            if(!is_null($c))
-            {
+            try{
+                $teacher=Teachers::find($id);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            if(isset($teacher)){
                 $title="Update Yourself";
                 $url=url('/tprofilee/t_update') ."/". $id;
-                $data=compact('c','url','title');
+                $data=compact('teacher','url','title');
                 return view('teacher-update')->with($data);
             }
-            else
-            {
-                return redirect('/tprofilee');
-            }  
-        /*}
-          else
-          {
-            return redirect("/tlogin");
-          }*/
+            return redirect('/tprofilee');
     }
     public function teacherUpdate($id, Request $request)
     {
@@ -459,213 +444,264 @@ class ProjectController extends Controller
         $username=$request->input('username');
         $course=$request->input('course');
         $gender=$request->input('gender');
-        Teachers::teacherupdate($id,$name,$username,$course,$gender);
+        try{
+            Teachers::teacherupdate($id,$name,$username,$course,$gender);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
         return redirect("/tprofilee");
     }
     public function createNewAssignment()
     {  
-      //  if(session()->has('username'))
-        //{
-            $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $session=session('username');
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        $session=session('username');
+        try{
             $you=Teachers::you($session);
-            $data=compact('you');
-            return view('create_assignment')->with($data);
-    /*    }
-        else
-          {
-            return redirect("/tlogin");
-          }
-    */
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        $data=compact('you');
+        return view('create_assignment')->with($data);
     }
     public function createNewAssignmentPost(assignmentVal $request)
     {
-        /*
-        $this->validate($request, 
-            [
-                'assignment' => 'required',
-            ]
-            );
-        */
         $request->validate();
         $session=session('username');
-        $you=Teachers::you($session);
+        try{
+            $you=Teachers::you($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
         $username=$session;
         $course=$request->input('course');
         $assignment=$request->input('assignment');
-        Assignments::create($username,$course,$assignment);
-
+        try{
+            Assignments::create($username,$course,$assignment);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
         return redirect("/tprofilee");
     }
     public function teacherMyAsssignment()
     {  
-     //   if(session()->has('username'))
-     //   {
             $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-            {
+            try{
+                $anyStudentByChance=Students::anyStudentByChance($session);
+                $anyAdminByChance=Admins::anyAdminByChance($session);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
                 return redirect("/notloggedin");
             }
-            $c=Assignments::get();  
             $session=session('username');
-            $you=Teachers::you($session);
-            $data=compact('c','you');
+            try{
+                $student=Assignments::get();  
+                $you=Teachers::you($session);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            $data=compact('student','you');
             return view('my_assignments')->with($data);
-    /*    }
-        else
-          {
-            return redirect("/tlogin");
-          }
-    */
     }
     public function assignmentDelete($id)
     {  
-       /* if(session()->has('username'))
-        {*/
-            $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $as=Assignments::find($id);
-            if(!is_null($as))
-            {
-                $as->delete();
-            }
-            return redirect('/my_assignments');
-        /*}
-        else
-          {
-            return redirect("/tlogin");
-          }*/
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        try{
+            $assignment=Assignments::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($assignment))
+        {
+            $assignment->delete();
+        }
+        return redirect('/my_assignments');
     }
     public function assignmentWrite($id)
     {
-        //if(session()->has('username'))
-        //{
             $session=session('username');
-            $anyteacherbychance=Teachers::anyteacherbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anyteacherbychance!='[]' || $anyadminbychance!="[]")
-            {
+            try{
+                $anyTeacherByChance=Teachers::anyTeacherByChance($session);
+                $anyAdminByChance=Admins::anyAdminByChance($session);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            if($anyTeacherByChance!='[]' || $anyAdminByChance!="[]"){
                 return redirect("/notloggedin");
             }
             $session=session('username');
-            $you=Students::you($session); 
-            $a=Assignments::find($id);
-            $as=Assignments::par_id($id);
-            if(!is_null($a))
-            {
+            try{
+                $you=Students::you($session); 
+                $assignment=Assignments::find($id);
+                $assignments=Assignments::particularId($id);
+            }
+            catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            if(isset($assignment)){
                 $url=url('/sprofilee/assignment_write_post') ."/". $id;
-                $data=compact('a','url','you','as');
+                $data=compact('url','you','assignments');
                 return view('student-assignmet-update')->with($data);
             }
-            else
-            {
-                return redirect('/sprofilee');
-            }    
-        /*}
-        else
-        {
-            return redirect("/slogin");
-        }*/
+            return redirect('/sprofilee');
     }
     public function assignmentWritePost($id,assignmentDoneVal $request)
     {
-        /*$this->validate($request, 
-        [
-            'done_assignment' => 'required'
-        ]
-        );*/
         $request->validate();
         $student_name=$request->input('student_name');
         $teacher_name=$request->input('teacher_name');
         $done_assignment=$request->input('done_assignment');
         $course=$request->input('course');
         $assignment=$request->input('assignment');
-        Studentassignments::create($student_name,$teacher_name,$done_assignment,$course,$assignment);
+        try{
+            Studentassignments::create($student_name,$teacher_name,$done_assignment,$course,$assignment);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
         return redirect("/sprofilee");
     }
 
     public function studentAssignmentToTeacher()
     {
-        //if(session()->has('username'))
-        //{
-            $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyadminbychance=Admins::anyadminbychance($session);
-            if($anystudentbychance!="[]" || $anyadminbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $as=Studentassignments::get();  
-            $session=session('username');
-            $you=Teachers::you($session);
-            //$you=Teachers::where('username',session('username'))->get();      
-            $data=compact('as','you');
-            return view('student_assignment_view')->with($data);
-        /*}
-        else
-        {
-            return redirect("/slogin");
-        }*/
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyAdminByChance=Admins::anyAdminByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyAdminByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        $session=session('username');
+        try{
+            $assignment=Studentassignments::get();  
+            $you=Teachers::you($session);   
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        $data=compact('assignment','you');
+        return view('student_assignment_view')->with($data);
     }
     
-
     public function studentDeletebyadmin($id)
     {
         $session=session('username');
-        $anystudentbychance=Students::anystudentbychance($session);
-        $anyteacherbychance=Teachers::anyteacherbychance($session);
-        if($anystudentbychance!="[]" || $anyteacherbychance!="[]")
-        {
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyTeacherByChance=Teachers::anyTeacherByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyTeacherByChance!="[]"){
             return redirect("/notloggedin");
         }
-        $c=Students::find($id);
-        if(!is_null($c))
-        {
-            $c->delete();
+        try{
+            $student=Students::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($student)){
+            $student->delete();
         }
         return redirect('/aprofilee');
     }
     public function studentEditbyadmin($id)
     {
-        //if(session()->has('username'))
-        //{
-            $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyteacherbychance=Teachers::anyteacherbychance($session);
-            if($anystudentbychance!="[]" || $anyteacherbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $c=Students::find($id);
-            if(!is_null($c))
-            {
-                $title="Update Your student";
-                $url=url('/aprofilee/s_update') ."/". $id;
-                $data=compact('c','url','title');
-                return view('student-update')->with($data);
-            }
-            else
-            {
-                return redirect('/aprofilee');
-            }   
-        /*}
-        else
-        {
-        return redirect("/alogin");
-        }*/
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyTeacherByChance=Teachers::anyTeacherByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyTeacherByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        try{
+            $student=Students::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($student)){
+            $title="Update Your student";
+            $url=url('/aprofilee/s_update') ."/". $id;
+            $data=compact('student','url','title');
+            return view('student-update')->with($data);
+        }
+            return redirect('/aprofilee');  
     }
     public function studentUpdatebyadmin($id, Request $request)
     {
@@ -674,84 +710,75 @@ class ProjectController extends Controller
         $course=$request->input('course');
         $gender=$request->input('gender');
         $year=$request->input('year');
-        Teachers::studentupdate($id,$name,$username,$course,$gender,$year);
+        try{
+            Teachers::studentupdate($id,$name,$username,$course,$gender,$year);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
         return redirect("/aprofilee");
     }
     public function teacherDeletebyadmin($id)
     {
         $session=session('username');
-        $anystudentbychance=Students::anystudentbychance($session);
-        $anyteacherbychance=Teachers::anyteacherbychance($session);
-        if($anystudentbychance!="[]" || $anyteacherbychance!="[]")
-        {
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyTeacherByChance=Teachers::anyTeacherByChance($session);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyTeacherByChance!="[]"){
             return redirect("/notloggedin");
         }
-        $c=Teachers::find($id);
-        if(!is_null($c))
-        {
-            $c->delete();
+        try{
+            $teacher=Teachers::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($teacher)){
+            $teacher->delete();
         }
         return redirect('/aprofilee');
     }
-/*    public function teacherEditbyadmin($id)
-    {
-        $session=session('username');
-        $anystudentbychance=Students::anystudentbychance($session);
-        $anyteacherbychance=Teachers::anyteacherbychance($session);
-        if($anystudentbychance!="[]" || $anyteacherbychance!="[]")
-        {
-            return redirect("/notloggedin");
-        }
-        if(session()->has('username'))
-        {
-            $c=Teachers::find($id);
-            if(!is_null($c))
-            {
-                $title="Update Yourself";
-                $url=url('/aprofilee/t_update') ."/". $id;
-                $data=compact('c','url','title');
-                return view('teacher-update')->with($data);
-            }
-            else
-            {
-                return redirect('/aprofilee');
-            }  
-        }
-          else
-          {
-            return redirect("/alogin");
-          }
-    }
-*/
+
     public function teacherEditbyadmin($id)
     {
-    //    if(session()->has('username'))
-    //    {
-            $session=session('username');
-            $anystudentbychance=Students::anystudentbychance($session);
-            $anyteacherbychance=Teachers::anyteacherbychance($session);
-            if($anystudentbychance!="[]" || $anyteacherbychance!="[]")
-            {
-                return redirect("/notloggedin");
-            }
-            $c=Teachers::find($id);
-            if(!is_null($c))
-            {
-                $title="Update Yourself";
-                $url=url('/aprofilee/t_update') ."/". $id;
-                $data=compact('c','url','title');
-                return view('teacher-update')->with($data);
-            }
-            else
-            {
-                return redirect('/aprofilee');
-            }  
-   /*     }
-        else
-        {
-        return redirect("/alogin");
+        $session=session('username');
+        try{
+            $anyStudentByChance=Students::anyStudentByChance($session);
+            $anyTeacherByChance=Teachers::anyTeacherByChance($session);
         }
-    */
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if($anyStudentByChance!="[]" || $anyTeacherByChance!="[]"){
+            return redirect("/notloggedin");
+        }
+        try{
+            $teacher=Teachers::find($id);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
+        if(isset($teacher)){
+            $title="Update Yourself";
+            $url=url('/aprofilee/t_update') ."/". $id;
+            $data=compact('teacher','url','title');
+            return view('teacher-update')->with($data);
+        }
+        return redirect('/aprofilee');
     }
 
 
@@ -761,14 +788,20 @@ class ProjectController extends Controller
         $username=$request->input('username');
         $course=$request->input('course');
         $gender=$request->input('gender');
-        Teachers::teacherupdate($id,$name,$username,$course,$gender);
+        try{
+            Teachers::teacherupdate($id,$name,$username,$course,$gender);
+        }
+        catch(\Exception $exception){
+            return view('error')->with(
+            'error',$exception->getMessage()
+            );
+        }
         return redirect("/aprofilee");
     }
 
     public function studentlogout()
     {
-        if(session()->has('username'))
-        {
+        if(session()->has('username')){
             session()->pull('username',null);
         }
         return redirect("/slogin");
@@ -776,8 +809,7 @@ class ProjectController extends Controller
 
     public function teacherlogout()
     {
-        if(session()->has('username'))
-        {
+        if(session()->has('username')){
             session()->pull('username',null);
         }
         return redirect("/tlogin");
@@ -785,8 +817,7 @@ class ProjectController extends Controller
 
     public function adminlogout()
     {
-        if(session()->has('username'))
-        {
+        if(session()->has('username')){
             session()->pull('username',null);
         }
         return redirect("/alogin");

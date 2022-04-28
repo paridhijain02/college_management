@@ -17,7 +17,7 @@ class Assignments extends Model
         $assign->assignment=$assignment;
         $assign->save();
     }
-    public static function par_id($id)
+    public static function particularId($id)
     {
         return Assignments::where('id',$id)->get(); 
     }

@@ -17,7 +17,7 @@ class Admins extends Model
     {
         return Admins::where('username',$session)->get(); 
     }
-    public static function anyadminbychance($session)
+    public static function anyAdminByChance($session)
     {
         return Admins::where('username',$session)->get(); 
     }
