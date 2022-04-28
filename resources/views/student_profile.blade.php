@@ -32,7 +32,7 @@
     <h1>Hello Student,  {{session('username')}}</h1>
         -->
     <h1>Hello Student,  
-            @foreach($c as $i)
+            @foreach($student as $i)
             @if($i->username==session('username'))
                  {{$i->name}}
             @endif
@@ -48,9 +48,6 @@
 
         <h2>Course students</h2>
 <table class="table">
-        <!--<pre>
-        {{print_r($c)}}
-        </pre>    -->
       <thead>
               <tr>
                   <th>Name</th>
@@ -59,7 +56,7 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($c as $i)
+              @foreach($student as $i)
               @if($i->course==$yourcourse) 
               <tr>
                   <td>{{$i->name}}</td>
@@ -82,7 +79,7 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($a as $i)
+              @foreach($assignment as $i)
               @if($i->course==$yourcourse) 
                 <tr>
                     <td>{{$i->username}}</td>
@@ -109,7 +106,7 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($t as $i)
+              @foreach($teacher as $i)
               @if($i->course==$yourcourse) 
                 <tr>
                     <td>{{$i->name}}</td>

@@ -27,7 +27,7 @@
     <h1>Hello teacher, {{session('username')}}  </h1>
         -->
     <h1>Hello Teacher,  
-            @foreach($t as $i)
+            @foreach($teacher as $i)
             @if($i->username==session('username'))
                  {{$i->name}}
             @endif
@@ -52,7 +52,7 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($s as $i)
+              @foreach($student as $i)
               @if($i->course==$yourcourse) 
                 <tr>
                     <td>{{$i->name}}</td>
@@ -85,7 +85,7 @@
               </tr>
           </thead>
           <tbody>
-            @foreach($t as $i)
+            @foreach($teacher as $i)
               @if($i->course==$yourcourse) 
                 <tr>
                     <td>{{$i->name}}</td>

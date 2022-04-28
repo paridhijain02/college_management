@@ -13,19 +13,11 @@
   </head>
   <body>
   <form class="row g-3" action="{{$url}}" method="post">
-   <!--<form class="row g-3" action="{{url('/')}}/customers" method="post">
-    <form class="row g-3" action="{{url('/')}}/costumers" method="post">-->
         {{ csrf_field() }}
-    <!--    <pre>
-            @php
-                print_r($errors->all());
-            @endphp
-        </pre>
-    -->
         <h2 class="text-center text-primary">{{$title}}</h2>
         <div class="col-md-6">
             <label for="inputEmail4" class="form-label">Name</label>
-            <input type="" name="name" class="form-control" id="" value="{{$c->name}}"><!--{{old('name')}}-->
+            <input type="" name="name" class="form-control" id="" value="{{$student->name}}">
             <span class="text-danger">
             @php
                 foreach ($errors->get('name') as $message) 
@@ -38,7 +30,7 @@
 
         <div class="col-md-6">
             <label for="inputEmail4" class="form-label">Username</label>
-            <input type="" name="username" class="form-control" id="" value="{{$c->username}}">
+            <input type="" name="username" class="form-control" id="" value="{{$student->username}}">
             <span class="text-danger">
                 
             @foreach($errors->get('username') as $message) 
@@ -52,7 +44,7 @@
 
         <div class="col-md-6">
             <label for="inputEmail4" class="form-label">Gender</label>
-            <input type="" name="gender" class="form-control" id="" value="{{$c->gender}}">
+            <input type="" name="gender" class="form-control" id="" value="{{$student->gender}}">
             <span class="text-danger">
             @php
                 foreach ($errors->get('gender') as $message) 
@@ -65,7 +57,7 @@
 
         <div class="col-md-6">
         <label  class="form-label">Course</label>
-        <input list="course" name="course" value="{{$c->course}}">
+        <input list="course" name="course" value="{{$student->course}}">
             <datalist id="course" name="course" >
                 <option value="B Tech">
                 <option value="B.A.">
@@ -85,7 +77,7 @@
 
         <div class="col-md-6">
         <label  class="form-label">Year of Joining</label>
-        <input list="year" name="year" value="{{$c->year}}">
+        <input list="year" name="year" value="{{$student->year}}">
             <datalist id="year" name="year" >
                 <option value="2018">
                 <option value="2019">
@@ -108,15 +100,8 @@
         </div>
 </form>
 
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    -->
+  
   </body>
 </html>

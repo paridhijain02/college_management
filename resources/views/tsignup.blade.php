@@ -2,11 +2,9 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap CSS -->
     
     <title>Teacher signup</title>
     <style>
@@ -16,7 +14,6 @@
         }
         .btn
         {
-            
             position: relative;
             padding: 6px 30px;
             border: 2px solid black;
@@ -67,15 +64,8 @@
   <div id="contact">
     <div class="box">
         <form class="row g-3" action="{{url('/')}}/tsignups" method="post">
-   <!--<form class="row g-3" action="{{url('/')}}/customers" method="post">
-    <form class="row g-3" action="{{url('/')}}/costumers" method="post">-->
         {{ csrf_field() }}
-    <!--    <pre>
-            @php
-                print_r($errors->all());
-            @endphp
-        </pre>
-    -->
+ 
         <h2 class="text-center text-primary">Teacher Registration Page</h2>
 
         <div class="col-md-6">

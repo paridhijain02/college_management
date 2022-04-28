@@ -3,11 +3,9 @@
 <html lang="en">
   <head>
     <title>Teachers</title>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
@@ -18,7 +16,7 @@
               <input type="search" name="search" id="" class="form-control" placeholder="" value="{{$search}}">
             </div>
             <button class="btn btn-primary">Search</button>
-            <a href="{{url('/tview')}}">
+            <a href="{{url('/api/tview')}}">
                 <button class='btn btn-primary' type="button">Reset</button>
             </a>
         </form>
@@ -33,7 +31,7 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($t as $i)
+              @foreach($teachers as $i)
               <tr>
                   <td>{{$i->name}}</td>
                   <td>{{$i->username}}</td>
@@ -52,7 +50,7 @@
           </tbody>
       </table>
       <div class="row">
-          {{$t->links()}}
+          {{$teachers->links()}}
       </div>
   </div>
   </body>
