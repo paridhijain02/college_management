@@ -140,7 +140,7 @@ class ProjectController extends Controller
             'error',$exception->getMessage()
             );
         }
-        return redirect("/sview");
+        return redirect("/api/sview");
     }
     public function teacherRegistered()
     {
@@ -165,7 +165,7 @@ class ProjectController extends Controller
             'error',$exception->getMessage()
             );
         }
-        return redirect("/tview");
+        return redirect("/api/tview");
     }
     
     public function studentProfile()
@@ -818,7 +818,9 @@ class ProjectController extends Controller
     public function adminlogout()
     {
         if(session()->has('username')){
-            session()->pull('username',null);
+           // session()->pull('username',null);
+            //session()->forget('username', null);
+            session()->flush('username', null);
         }
         return redirect("/alogin");
     }
