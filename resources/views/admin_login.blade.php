@@ -63,7 +63,7 @@
 <body>
     <div id="contact">
         <div class="box">
-            <form action="/alogin" method="POST">
+            <form action="/adminLogin" method="POST">
             {{ csrf_field() }}
             <h1>Admin Login</h1>
                 <div class="mb-3">
@@ -98,4 +98,3 @@
     </div>
 </body>
 </html>
-<!--rgb(201, 197, 197);-->

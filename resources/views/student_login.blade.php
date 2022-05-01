@@ -64,7 +64,7 @@
 <body>
     <div id="contact">
         <div class="box">
-            <form action="/slogin" method="POST">
+            <form action="/studentLogin" method="POST">
             {{ csrf_field() }}
             <h1>Student Login</h1>
                 <div class="mb-3">
@@ -99,4 +99,3 @@
     </div>
 </body>
 </html>
-<!--rgb(201, 197, 197);-->

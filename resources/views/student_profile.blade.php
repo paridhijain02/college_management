@@ -22,9 +22,9 @@
         </style>
   </head>
 <body>
-        @foreach($you as $i)
+        @foreach($checkingSession as $i)
             @php
-                $yourname=$i->name;
+                $checkingSessionrname=$i->name;
             @endphp
         @endforeach
     <div class="center">
@@ -32,7 +32,7 @@
     <h1>Hello Student,  {{session('username')}}</h1>
         -->
     <h1>Hello Student,  
-            @foreach($c as $i)
+            @foreach($student as $i)
             @if($i->username==session('username'))
                  {{$i->name}}
             @endif
@@ -40,7 +40,7 @@
               </h1>
     </div>
 
-        @foreach($you as $i)
+        @foreach($checkingSession as $i)
             @php
                 $yourcourse=$i->course;
             @endphp
@@ -48,9 +48,6 @@
 
         <h2>Course students</h2>
 <table class="table">
-        <!--<pre>
-        {{print_r($c)}}
-        </pre>    -->
       <thead>
               <tr>
                   <th>Name</th>
@@ -59,7 +56,7 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($c as $i)
+              @foreach($student as $i)
               @if($i->course==$yourcourse) 
               <tr>
                   <td>{{$i->name}}</td>
@@ -78,19 +75,22 @@
                   <th>Teacher's name</th>
                   <th>Assignment</th>
                   <th>Course</th>
+                  <th>Number of attempts</th>
                   <th>Action</th>
               </tr>
           </thead>
           <tbody>
-              @foreach($a as $i)
+              @foreach($assignment as $i)
               @if($i->course==$yourcourse) 
                 <tr>
                     <td>{{$i->username}}</td>
                     <td>{{$i->assignment}}</td>
                     <td>{{$i->course}}</td>  
+                    <td>{{$i->number_answer_solved}}</td>
                     <td>   
-                        <a href="{{url('/sprofilee/assignment_write/')}}/{{$i->id}}"> 
+                        <a href="{{url('/studentProfile/assignment_write/')}}/{{$i->id}}"> 
                             <button class="btn btn-primary">Solve</button>    
+                            
                         </a>  
                     </td>
               </tr>
@@ -109,7 +109,7 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($t as $i)
+              @foreach($teacher as $i)
               @if($i->course==$yourcourse) 
                 <tr>
                     <td>{{$i->name}}</td>
@@ -123,7 +123,7 @@
  
      
 
-      <a href="{{url('/slogout')}}"> 
+      <a href="{{url('/studentLogout')}}"> 
             <button class="btn btn-primary">Logout</button>    
         </a>  
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
