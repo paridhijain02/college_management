@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateTeachersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('teachers', function (Blueprint $table) {
@@ -23,15 +18,7 @@ class CreateTeachersTable extends Migration
             $table->boolean('status')->default(0);
             $table->timestamps();
         });
-        
     }
-
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('teachers');
