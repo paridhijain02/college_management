@@ -1,124 +1,129 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use App\Students;
 use App\Teachers;
+use App\Admins;
 use App\Studentassignments;
 class ApiController extends Controller
 {
     public function studentView(Request $request)
     {
-        try
-        {
-            $search=$request['search']??"";
-            if($search!="")
-            {
-                $c=Students::search($search);
+        $search=$request['search']??"";
+        if($search!=""){
+            try{
+                $students=Students::search($search);
+            }catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
             }
-            else
+        }
+        else{
+            try{
+                $students = Students::index();
+            }catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            $filter_data = [];
+            foreach($students as $row)
             {
-            //$c=Students::paginate(3);
-                $c = Students::index();
-                $filter_data = [];
-                foreach($c as $row)
-                {
-                    array_push($filter_data, $row);
-                }
-                $count = count($filter_data);
-                $page = $request->page;
-                $perPage = 3;
-                $offset = ($page-1) * $perPage;
-                $c = array_slice($filter_data, $offset, $perPage);
-                $c = new Paginator($c, $count, $perPage, $page, ['path' => $request->url(),'query' => $request->query(),]);
-            }        
-            $data=compact('c','search');
-            return view('student-view')->with($data);
-        }
-        catch(\Exception $exception)
-        {
-            return view('error')->with
-            (
-            'error',$exception->getMessage()
-            );
-        }
+                array_push($filter_data, $row);
+            }
+            $count = count($filter_data);
+            $page = $request->page;
+            $perPage = 3;
+            $offset = ($page-1) * $perPage;
+            $students = array_slice($filter_data, $offset, $perPage);
+            $students = new Paginator($students, $count, $perPage, $page, ['path' => $request->url(),'query' => $request->query(),]);
+        }   
+        $data=compact('students','search');
+        return view('student-view')->with($data);
     }
 
     public function teacherView(Request $request)
     {
-        try
+        $search=$request['search']??"";
+        if($search != "")
         {
-            $search=$request['search']??"";
-            if($search!="")
-            {
-                $t=Teachers::search($search);
+            try{
+                $teachers = Teachers::search($search);
+            }catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
             }
-            else
-            {
-            //    $t=Teachers::paginate(3);
-                $t = Teachers::index();
-                $filter_data = [];
-                foreach($t as $row)
-                {
-                    array_push($filter_data, $row);
-                }
-                $count = count($filter_data);
-                $page = $request->page;
-                $perPage = 3;
-                $offset = ($page-1) * $perPage;
-                $t = array_slice($filter_data, $offset, $perPage);
-                $t = new Paginator($t, $count, $perPage, $page, ['path' => $request->url(),'query' => $request->query(),]);
-            }        
-            $data=compact('t','search');
-           return view('teacher-view')->with($data);
         }
-        catch(\Exception $exception)
-        {
-            return view('error')->with
-            (
-            'error',$exception->getMessage()
-            );
+        else{
+            try{
+                $teachers = Teachers::index();
+            }catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            $filter_data = [];
+            foreach($teachers as $row){
+                array_push($filter_data, $row);
+            }
+            $count = count($filter_data);
+            $page = $request->page;
+            $perPage = 3;
+            $offset = ($page-1) * $perPage;
+            $teachers = array_slice($filter_data, $offset, $perPage);
+            $teachers = new Paginator($teachers, $count, $perPage, $page, ['path' => $request->url(),'query' => $request->query(),]);
         }
+        $data=compact('teachers','search');
+        return view('teacher-view')->with($data);
     }
 
     public function allView(Request $request)
     {
-        try
-        {
-            $search=$request['search']??"";
-            if($search!="")
-            {
-                $t=Studentassignments::search($search);
-            }
-            else
-            {
-                //    $t=Teachers::paginate(3);
-                $t = Studentassignments::allpeople();
-                $filter_data = [];
-                foreach($t as $row)
-                {
-                    array_push($filter_data, $row);
-                }
-                $count = count($filter_data);
-                $page = $request->page;
-                $perPage = 5;
-                $offset = ($page-1) * $perPage;
-                $t = array_slice($filter_data, $offset, $perPage);
-                $t = new Paginator($t, $count, $perPage, $page, ['path' => $request->url(),'query' => $request->query(),]); 
-            }
-                   
-            $data=compact('t','s','search');
-           return view('all-view')->with($data);
-        }
-        catch(\Exception $exception)
-        {
-            return view('error')->with
-            (
+        $session=session('username');
+        try{
+            $studentNotAllowed=Students::studentNotAllowed($session);
+            $adminNotAllowed=Admins::adminNotAllowed($session);
+        } catch(\Exception $exception){
+            return view('error')->with(
             'error',$exception->getMessage()
             );
         }
+        if($studentNotAllowed!="[]" || $adminNotAllowed!="[]"){
+            return redirect("/notloggedin");
+        }
+        $search=$request['search']??"";
+        if($search!=""){
+            try{
+                $allpeople = Studentassignments::search($search);
+            }catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+        }
+        else{
+            try{
+                $allpeople = Studentassignments::allpeople();
+            } catch(\Exception $exception){
+                return view('error')->with(
+                'error',$exception->getMessage()
+                );
+            }
+            $filter_data = [];
+            foreach($allpeople as $row){
+                array_push($filter_data, $row);
+            }
+            $count = count($filter_data);
+            $page = $request->page;
+            $perPage = 5;
+            $offset = ($page-1) * $perPage;
+            $allpeople = array_slice($filter_data, $offset, $perPage);
+            $allpeople = new Paginator($allpeople, $count, $perPage, $page, ['path' => $request->url(),'query' => $request->query(),]); 
+        }        
+        $data=compact('allpeople','search');
+        return view('all-view')->with($data);  
     }
-
 }

@@ -21,7 +21,7 @@ class Teachers extends Model
     }
     public static function search($search)
     {
-        return Teachers::where('name','=',$search)->orwhere('username','=',$search)->orwhere('course','=',$search)->paginate(3);
+        return Teachers::where('name','LIKE','%'.$search .'%')->orwhere('username','LIKE','%'.$search .'%')->orwhere('course','LIKE','%'.$search .'%')->paginate(3);
     }
     public static function index()
     {
@@ -32,18 +32,12 @@ class Teachers extends Model
     {
         return Teachers::where('username',$username)->get();
     }
-/*
-    public static function anystudentbychance($session)
-    {
-        return Students::where('username',$session)->get(); 
-    }
-*/
-    public static function anyteacherbychance($session)
+    public static function teacherNotAllowed($session)
     {
         return Teachers::where('username',$session)->get(); 
     }
-    public static function you($session)
-    {
+    public static function checkingSession($session)
+    {                                  
         return Teachers::where('username',$session)->get(); 
     }
     public static function studentupdate($id,$name,$username,$course,$gender,$year)
@@ -64,6 +58,5 @@ class Teachers extends Model
         $teacher->course=$course;
         $teacher->gender=$gender;
         $teacher->save();
-    }
-    
+    }    
 }
