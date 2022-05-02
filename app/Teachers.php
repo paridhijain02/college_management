@@ -11,13 +11,13 @@ class Teachers extends Model
 
     public static function register($name,$username,$course,$gender,$password)
     {
-        $teacher=new Teachers;
-        $teacher->name=$name;
-        $teacher->username=$username;
-        $teacher->course=$course;
-        $teacher->gender=$gender;
-        $teacher->password=$password;
-        $teacher->save();
+        $teacher    =new Teachers;
+        $teacher    ->name=$name;
+        $teacher    ->username=$username;
+        $teacher    ->course=$course;
+        $teacher    ->gender=$gender;
+        $teacher    ->password=$password;
+        $teacher    ->save();
     }
     public static function search($search)
     {
@@ -42,21 +42,21 @@ class Teachers extends Model
     }
     public static function studentupdate($id,$name,$username,$course,$gender,$year)
     {
-        $student=Students::find($id);
-        $student->name=$name;
-        $student->username=$username;
-        $student->course=$course;
-        $student->year=$year;
-        $student->gender=$gender;
-        $student->save();
+        $student    =Students::find($id);
+        $student    ->name=$name;
+        $student    ->username=$username;
+        $student    ->course=$course;
+        $student    ->year=$year;
+        $student    ->gender=$gender;
+        $student    ->save();
     }
     public static function teacherupdate($id,$name,$username,$course,$gender)
     {
-        $teacher=Teachers::find($id);
-        $teacher->name=$name;
-        $teacher->username=$username;
-        $teacher->course=$course;
-        $teacher->gender=$gender;
-        $teacher->save();
+        $teacher    =Teachers::find($id);
+        $teacher    ->name=$name;
+        $teacher    ->username=$username;
+        $teacher    ->course=$course;
+        $teacher    ->gender=$gender;
+        $teacher    ->save();
     }    
 }

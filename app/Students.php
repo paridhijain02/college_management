@@ -11,14 +11,14 @@ class Students extends Model
 
     public static function register($name,$username,$course,$year,$gender,$password)
     {
-        $student=new Students;
-        $student->name=$name;
-        $student->username=$username;
-        $student->course=$course;
-        $student->year=$year;
-        $student->gender=$gender;
-        $student->password=$password;
-        $student->save();
+        $student=   new Students;
+        $student->  name=$name;
+        $student->  username=$username;
+        $student->  course=$course;
+        $student->  year=$year;
+        $student->  gender=$gender;
+        $student->  password=$password;
+        $student->  save();
     }
     public static function search($search)
     {
