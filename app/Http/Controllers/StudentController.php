@@ -75,14 +75,14 @@ class StudentController extends Controller
     {
         $session=session('username');
         try{
-            $teacherNotAllowedVariable=Teachers::teacherNotAllowed($session);
-            $adminNotAllowedVariable=Admins::adminNotAllowed($session);
+            $teacherNotAllowedHere=Teachers::teacherNotAllowed($session);
+            $adminNotAllowedHere=Admins::adminNotAllowed($session);
         } catch(\Exception $exception){
             return view('error')->with(
             'error',$exception->getMessage()
             );
         }
-        if(!empty($adminNotAllowedVariable) || !empty($teacherNotAllowedVariable)){
+        if(!empty($adminNotAllowedHere) || !empty($teacherNotAllowedHere)){
             return redirect("/notLoggedIn");
         }
         try{
@@ -102,14 +102,14 @@ class StudentController extends Controller
     {
             $session=session('username');
             try{
-                $teacherNotAllowedVariable=Teachers::teacherNotAllowed($session);
-                $adminNotAllowedVariable=Admins::adminNotAllowed($session);
+                $teacherNotAllowedHere=Teachers::teacherNotAllowed($session);
+                $adminNotAllowedHere=Admins::adminNotAllowed($session);
             } catch(\Exception $exception){
                 return view('error')->with(
                 'error',$exception->getMessage()
                 );
             }
-            if(!empty($adminNotAllowedVariable) || !empty($teacherNotAllowedVariable)){
+            if(!empty($adminNotAllowedHere) || !empty($teacherNotAllowedHere)){
                 return redirect("/notLoggedIn");
             }
             $session=session('username');

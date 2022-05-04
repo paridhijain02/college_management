@@ -49,15 +49,15 @@ class AdminController extends Controller
     {
         $session=session('username');
         try{
-            $studentNotAllowedVariable=Students::studentNotAllowed($session);
-            $teacherNotAllowedVariable=Teachers::teacherNotAllowed($session);
+            $studentNotAllowedHere=Students::studentNotAllowed($session);
+            $teacherNotAllowedHere=Teachers::teacherNotAllowed($session);
         } catch(\Exception $exception)
         {
             return view('error')->with(
             'error',$exception->getMessage()
             );
         }
-        if(!empty($teacherNotAllowedVariable) || !empty($studentNotAllowedVariable)){  
+        if(!empty($teacherNotAllowedHere) || !empty($studentNotAllowedHere)){  
             return redirect("/notLoggedIn");
         }
         $ssearch=$request['ssearch']??"";
@@ -95,14 +95,14 @@ class AdminController extends Controller
     {
         $session=session('username');
         try{
-            $studentNotAllowedVariable=Students::studentNotAllowed($session);
-            $teacherNotAllowedVariable=Teachers::teacherNotAllowed($session);
+            $studentNotAllowedHere=Students::studentNotAllowed($session);
+            $teacherNotAllowedHere=Teachers::teacherNotAllowed($session);
         } catch(\Exception $exception){
             return view('error')->with(
             'error',$exception->getMessage()
             );
         }
-        if(!empty($teacherNotAllowedVariable) || !empty($studentNotAllowedVariable)){  
+        if(!empty($teacherNotAllowedHere) || !empty($studentNotAllowedHere)){  
             return redirect("/notLoggedIn");
         }
         try{
@@ -121,14 +121,14 @@ class AdminController extends Controller
     {
         $session=session('username');
         try{
-            $studentNotAllowedVariable=Students::studentNotAllowed($session);
-            $teacherNotAllowedVariable=Teachers::teacherNotAllowed($session);
+            $studentNotAllowedHere=Students::studentNotAllowed($session);
+            $teacherNotAllowedHere=Teachers::teacherNotAllowed($session);
         } catch(\Exception $exception){
             return view('error')->with(
             'error',$exception->getMessage()
             );
         }
-        if(!empty($teacherNotAllowedVariable) || !empty($studentNotAllowedVariable)){  
+        if(!empty($teacherNotAllowedHere) || !empty($studentNotAllowedHere)){  
             return redirect("/notLoggedIn");
         }
         try{
@@ -168,14 +168,14 @@ class AdminController extends Controller
     {
         $session=session('username');
         try{
-            $studentNotAllowedVariable=Students::studentNotAllowed($session);
-            $teacherNotAllowedVariable=Teachers::teacherNotAllowed($session);
+            $studentNotAllowedHere=Students::studentNotAllowed($session);
+            $teacherNotAllowedHere=Teachers::teacherNotAllowed($session);
         } catch(\Exception $exception){
             return view('error')->with(
             'error',$exception->getMessage()
             );
         }
-        if(!empty($teacherNotAllowedVariable) || !empty($studentNotAllowedVariable)){  
+        if(!empty($teacherNotAllowedHere) || !empty($studentNotAllowedHere)){  
             return redirect("/notLoggedIn");
         }
         try{
@@ -195,14 +195,14 @@ class AdminController extends Controller
     {
         $session=session('username');
         try{
-            $studentNotAllowedVariable=Students::studentNotAllowed($session);
-            $teacherNotAllowedVariable=Teachers::teacherNotAllowed($session);
+            $studentNotAllowedHere=Students::studentNotAllowed($session);
+            $teacherNotAllowedHere=Teachers::teacherNotAllowed($session);
         } catch(\Exception $exception){
             return view('error')->with(
             'error',$exception->getMessage()
             );
         }
-        if(!empty($teacherNotAllowedVariable) || !empty($studentNotAllowedVariable)){  
+        if(!empty($teacherNotAllowedHere) || !empty($studentNotAllowedHere)){  
             return redirect("/notLoggedIn");
         }
         try{
