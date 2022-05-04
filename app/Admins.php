@@ -13,12 +13,12 @@ class Admins extends Model
     {
         return Admins::where('username',$username)->get();
     }
-    public static function you($session)
+    public static function checkingSession($session)
     {
         return Admins::where('username',$session)->get(); 
     }
-    public static function anyadminbychance($session)
+    public static function adminNotAllowed($session)
     {
-        return Admins::where('username',$session)->get(); 
+        return Admins::where('username',$session)->first(); 
     }
 }

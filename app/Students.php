@@ -11,19 +11,19 @@ class Students extends Model
 
     public static function register($name,$username,$course,$year,$gender,$password)
     {
-        $student=new Students;
-        $student->name=$name;
-        $student->username=$username;
-        $student->course=$course;
-        $student->year=$year;
-        $student->gender=$gender;
-        $student->password=$password;
-        $student->save();
+        $student=   new Students;
+        $student->  name=$name;
+        $student->  username=$username;
+        $student->  course=$course;
+        $student->  year=$year;
+        $student->  gender=$gender;
+        $student->  password=$password;
+        $student->  save();
     }
     public static function search($search)
     {
-        return Students::where('name','=',$search)->orwhere('username','=',$search)->orwhere('course','=',$search)->paginate(3);
-    }
+        return Students::where('name','LIKE','%'.$search .'%')->orwhere('username','LIKE','%'.$search .'%')->orwhere('course','LIKE','%'.$search .'%')->paginate(3);
+    } 
     public static function login($username)
     {
         return Students::where('username',$username)->get();
@@ -32,17 +32,11 @@ class Students extends Model
     {
         return Students::get();
     }
-    /*
-    public static function anyteacherbychance($session)
+    public static function studentNotAllowed($session)
     {
-        return Teachers::where('username',$session)->get(); 
+        return Students::where('username',$session)->first(); 
     }
-    */
-    public static function anystudentbychance($session)
-    {
-        return Students::where('username',$session)->get(); 
-    }
-    public static function you($session)
+    public static function checkingSession($session)
     {
         return Students::where('username',$session)->get(); 
     }
