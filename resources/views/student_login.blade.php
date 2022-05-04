@@ -34,7 +34,6 @@
             justify-content: center;
             align-items: center;
             padding-top: 100px;
-            /*border: 2px solid black;*/
         }
         #contact .box 
         {
@@ -64,7 +63,7 @@
 <body>
     <div id="contact">
         <div class="box">
-            <form action="/slogin" method="POST">
+            <form action="/studentLoginPost" method="POST">
             {{ csrf_field() }}
             <h1>Student Login</h1>
                 <div class="mb-3">
@@ -99,4 +98,3 @@
     </div>
 </body>
 </html>
-<!--rgb(201, 197, 197);-->

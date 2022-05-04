@@ -2,11 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <title>Teacher Profile</title>
@@ -22,82 +20,90 @@
         </style>
   </head>
 <body>
+
+
     <div class="center">
-        <!--
-    <h1>Hello teacher, {{session('username')}}  </h1>
-        -->
     <h1>Hello Teacher,  
-            @foreach($t as $i)
+            @foreach($teacher as $i)
             @if($i->username==session('username'))
                  {{$i->name}}
             @endif
               @endforeach
               </h1>
-
-
     </div>
-        @foreach($you as $i)
-            @php
-                $yourcourse=$i->course;
-            @endphp
-        @endforeach
-        <h2>Course students</h2>
-<table class="table">
-      <thead>
+    @foreach($checkingSession as $i)
+        @php
+            $yourcourse=$i->course;
+            $yourusername=$i->username;
+        @endphp
+    @endforeach
+    <h2>Course students</h2>
+    <table class="table">
+        <thead>
               <tr>
                   <th>Name</th>
                   <th>Username</th>
                   <th>Course</th>
-                  <th>Action</th>
+                  <th>Update</th>
+                  <th>Delete</th>
               </tr>
-          </thead>
-          <tbody>
-              @foreach($s as $i)
-              @if($i->course==$yourcourse) 
+        </thead>
+        <tbody>
+            @foreach($student as $i)
+            @if($i->course==$yourcourse) 
                 <tr>
                     <td>{{$i->name}}</td>
                     <td>{{$i->username}}</td>
                     <td>{{$i->course}}</td>
-                    <td>   
-                        <a href="{{url('/tprofilee/s_delete/')}}/{{$i->id}}"> 
-                            <button class="btn btn-danger">Delete</button>    
-                        </a>   
-                        <a href="{{url('/tprofilee/s_edit/')}}/{{$i->id}}"> 
+                    <td>
+                        <a href="{{url('/teacherProfile/studentEdit/')}}/{{$i->id}}"> 
                             <button class="btn btn-primary">Edit</button>    
-                        </a>  
+                        </a> 
                     </td>
-              </tr>
-              @endif
-              @endforeach
+                    <td>  
+                        <form action="/teacherProfile/studentDelete/{{ $i->id }}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <button class="btn btn-danger">Delete</button> 
+                        </form>
+                    </td>
+                </tr>
+            @endif
+            @endforeach
           </tbody>
       </table>
       
-
       <h2>Course Teachers</h2>
-      
       <table class="table">
-      <thead>
+        <thead>
               <tr>
                   <th>Name</th>
                   <th>Username</th>
                   <th>Course</th>
-                  <th>Action</th>
+                  <th>Update</th>
+                  <th>Delete</th>
               </tr>
-          </thead>
+        </thead>
           <tbody>
-            @foreach($t as $i)
-              @if($i->course==$yourcourse) 
+            @foreach($teacher as $i)
+              @if($i->course==$yourcourse ) 
                 <tr>
                     <td>{{$i->name}}</td>
                     <td>{{$i->username}}</td>
                     <td>{{$i->course}}</td>
                     <td>   
-                        <a href="{{url('/tprofilee/t_delete/')}}/{{$i->id}}"> 
-                            <button class="btn btn-danger">Delete</button>    
-                        </a>   
-                        <a href="{{url('/tprofilee/t_edit/')}}/{{$i->id}}"> 
+                        <a href="{{url('/teacherProfile/teacherEdit/')}}/{{$i->id}}"> 
                             <button class="btn btn-primary">Edit</button>    
-                        </a>  
+                        </a> 
+                    </td>
+                    <td>
+                        @if($i->username!=$yourusername) 
+                        <form action="/teacherProfile/teacherDelete/{{ $i->id }}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <button class="btn btn-danger">Delete</button> 
+                        </form> 
+                        @endif
                     </td>  
                 </tr>
               @endif
@@ -107,18 +113,20 @@
       
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
-
-        <a href="{{url('/create_assignment')}}"> 
+        <a href="{{url('/createAssignment')}}"> 
             <button class="btn btn-primary">Create Assignment</button>    
         </a>  
-        <a href="{{url('/my_assignments')}}"> 
+        <a href="{{url('/myAssignments')}}"> 
             <button class="btn btn-primary">My Assignments</button>    
         </a>  
-        <a href="{{url('/tlogout')}}"> 
+        <a href="{{url('/teacherLogout')}}"> 
             <button class="btn btn-primary">Logout</button>    
         </a>  
-        <a href="{{url('/student_assignment_view')}}"> 
+        <a href="{{url('/studentAssignmentView')}}"> 
             <button class="btn btn-primary">View students assignments</button>    
+        </a>  
+        <a href="{{url('api/allPeopleView')}}"> 
+            <button class="btn btn-primary">Everyone's view</button>    
         </a>  
 </body>
 </html>

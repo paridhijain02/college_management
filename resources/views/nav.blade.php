@@ -21,7 +21,6 @@
   }
     .wrapper .sidebar
     {
-        /*background: rgb(5, 68, 104);*/
         background: rgb(253, 253, 151);
         position: fixed;
         top: 0;
@@ -65,17 +64,17 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('register.slogin')}}" >
+                    <a href="{{route('register.studentLogin')}}" >
                         <span class="item">Student Login</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('register.tlogin')}}"> <!-- class="active"-->
+                    <a href="{{route('register.teacherLogin')}}"> 
                         <span class="item">Teacher Login</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('register.alogin')}}">
+                    <a href="{{route('register.adminLogin')}}">
                         <span class="item">Admin Login</span>
                     </a>
                 </li>
@@ -89,21 +88,7 @@
                         <span class="item">Teacher Register</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{route('student.view')}}">
-                        <span class="item">Student View</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('teacher.view')}}">
-                        <span class="item">Teacher View</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('all.view')}}">
-                        <span class="item">All View</span>
-                    </a>
-                </li>
+                
             </ul>
         </div>
     </div>	

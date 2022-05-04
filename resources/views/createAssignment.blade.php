@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,13 +7,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <title>Write assignment</title>
+    <title>Create Assignment</title>
     <style>
-        #borwhite
-        {
-            border: 2px solid white;
-            font-size: 40px;
-        }
         #white
         {
             border: 2px solid white;
@@ -21,22 +17,16 @@
     </style>
   </head>
   <body>
-  <form class="row g-3" action="{{$url}}" method="post">
+  <form class="row g-3" action="{{url('/')}}/createAssignment" method="post"> 
         {{ csrf_field() }}
-        <h2 class="text-center text-primary">Solve the assignment {{session('username')}}</h2>
+        <h2 class="text-center text-primary">Create an assignment {{session('username')}}</h2>
         <h1></h1>
-        @foreach($assignments as $i)
-        <div class="col-md-12">
-        <input list="assignment" name="assignment" value="{{$i->assignment}}" id="borwhite" size="50">
-        </div>
-        @endforeach
-
         <div class="col-md-6">
-            <label  class="form-label">Write answer of Assignment</label>
-            <textarea name="done_assignment" class="form-control" rows="10" cols="30" value="{{old('done_assignment')}}"></textarea>
+            <label  class="form-label">Assignment</label>
+            <textarea name="assignment" class="form-control" rows="10" cols="30" value="{{old('assignment')}}"></textarea>
             <span class="text-danger">
             @php
-                foreach ($errors->get('done_assignment') as $message) 
+                foreach ($errors->get('assignment') as $message) 
                 {
                     echo $message;
                 }
@@ -50,30 +40,16 @@
         </div>
         @endforeach
 
-
-        @foreach($assignments as $i)
-        <div class="col-md-6">
-        <input list="teacher_name" name="teacher_name" value="{{$i->username}}" id="white">
-        </div>
-        @endforeach
-
-        @foreach($checkingSession as $i)
-        <div class="col-md-6">
-        <input list="student_name" name="student_name" value="{{$i->username}}" id="white">
-        </div>
-        @endforeach
-
-      
-
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Create</button>
         </div>
         
 </form>
 <br>
-        <a href="{{url('/studentProfile')}}"> 
+<a href="{{url('/teacherProfile')}}"> 
             <button class="btn btn-primary">Back</button>    
         </a>  
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
   </body>

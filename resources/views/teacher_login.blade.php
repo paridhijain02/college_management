@@ -13,7 +13,6 @@
         }
         .btn
         {
-            
             position: relative;
             padding: 6px 30px;
             border: 2px solid black;
@@ -63,7 +62,7 @@
 <body>
     <div id="contact">
         <div class="box">
-            <form action="/tlogin" method="POST">
+            <form action="/teacherLoginPost" method="POST">
             {{ csrf_field() }}
             <h1>Teacher Login</h1>
                 <div class="mb-3">
